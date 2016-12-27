@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+
+<SplitPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
+           maxHeight="Infinity" maxWidth="Infinity"
+           fx:controller="pl.khuzzuk.mtg.organizer.gui.EditionsPaneController"
+           dividerPositions="0.3">
+    <ListView maxWidth="Infinity" maxHeight="Infinity" fx:id="items"/>
+    <GridPane hgap="5" vgap="3">
+        <padding>
+            <Insets top="5" bottom="5" left="5" right="5"/>
+        </padding>
+        <Label text="Nazwa"/>
+        <TextField fx:id="name" GridPane.columnIndex="1"/>
+        <Label text="Rok" GridPane.rowIndex="1"/>
+        <TextField fx:id="year" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+</SplitPane>

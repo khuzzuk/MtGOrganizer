@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<GridPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
+          maxWidth="Infinity" maxHeight="Infinity" prefWidth="1600" prefHeight="800"
+          fx:controller="pl.khuzzuk.mtg.organizer.gui.MainWindow">
+    <MenuBar prefHeight="25.0" prefWidth="Infinity" GridPane.columnSpan="2">
+        <Menu mnemonicParsing="false" text="Plik">
+            <MenuItem id="menuItemClose" mnemonicParsing="false" text="Zamknij"/>
+        </Menu>
+    </MenuBar>
+    <TabPane GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+        <Tab text="Edycje">
+            <fx:include source="editionsPane.fxml" fx:id="editions"/>
+        </Tab>
+    </TabPane>
+</GridPane>
