@@ -1,5 +1,6 @@
 package pl.khuzzuk.mtg.organizer.gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,8 +32,9 @@ public class MainWindowStage extends Stage {
             throw new RuntimeException("can't find mainWindow.fxml");
         }
         setOnCloseRequest(e -> {
-            bus.closeBus();
+            close();
+            Platform.exit();
             dao.close();
-            close();});
+            bus.closeBus();});
     }
 }

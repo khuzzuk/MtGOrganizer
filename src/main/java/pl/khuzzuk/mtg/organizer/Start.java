@@ -15,19 +15,31 @@ import java.util.Properties;
 public class Start extends Application {
     private DAO dao;
     private Bus bus;
+    private Properties messages;
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Properties messages = new Properties();
+        messages = new Properties();
         messages.load(new BufferedReader(new InputStreamReader(Start.class.getResourceAsStream("/messages.properties"))));
-        dao = new DAO();
-        dao.initResolvers(Edition.class);
         bus = Bus.initializeBus();
+        initDao();
         ControllersFactoryFacade facade = new ControllersFactoryFacade(bus, dao, messages);
         facade.init();
         new MainWindowStage(facade, primaryStage, bus, dao).show();
+    }
+
+    private void initDao() {
+        dao = new DAO();
+        dao.initResolvers(Edition.class);
+        bus.setReaction(messages.getProperty("editions.load.all"),
+                () -> bus.send(messages.getProperty("editions.receive.all"), dao.getAllEntities(Edition.class)));
+        bus.setResponseResolver(messages.getProperty("editions.save.named"), e -> {
+            dao.saveEntity((Edition) e);
+            return dao.getAllEntities(Edition.class);
+        });
     }
 }
