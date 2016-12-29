@@ -123,7 +123,7 @@
         <dependency>
             <groupId>pl.khuzzuk</groupId>
             <artifactId>generic-dao</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4</version>
         </dependency>
 
         <!--AspectJ-->

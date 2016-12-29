@@ -1,10 +1,23 @@
-19:22:19.634 [JavaFX Application Thread] INFO  - accepted message: Message=editions.load.all
-19:22:19.636 [Scheduler thread] INFO  - forwarded: Message=editions.load.all to: AbstractSubscriber(messageType=editions.load.all)
-19:22:19.637 [pool-3-thread-1] INFO  - received message: Message=editions.load.all
-19:22:19.968 [pool-3-thread-1] INFO  - accepted message: ContentMessage(type=editions.receive.all)
-19:22:19.968 [Scheduler thread] INFO  - forwarded: ContentMessage(type=editions.receive.all) to: AbstractContentSubscriber(messageType=editions.receive.all)
-19:22:19.969 [pool-3-thread-2] INFO  - received message: ContentMessage(type=editions.receive.all)
-19:22:27.598 [JavaFX Application Thread] INFO  - Termination of the Bus
-19:22:29.603 [JavaFX Application Thread] ERROR - Termination of the Bus did not success.
-19:22:29.604 [JavaFX Application Thread] ERROR - null
-19:22:29.610 [JavaFX Application Thread] ERROR - [Ljava.lang.StackTraceElement;@4b8b7041
+15:40:31.557 [JavaFX Application Thread] INFO  - accepted message: CommunicateRequest=cards.load.allresponseType='cards.receive.all
+15:40:31.559 [Scheduler thread] INFO  - forwarded: CommunicateRequest=cards.load.allresponseType='cards.receive.all to: AbstractSubscriber(messageType=cards.load.all)
+15:40:31.560 [pool-3-thread-1] INFO  - received message: CommunicateRequest=cards.load.allresponseType='cards.receive.all
+15:40:31.575 [JavaFX Application Thread] INFO  - accepted message: Message=editions.load.all
+15:40:31.575 [Scheduler thread] INFO  - forwarded: Message=editions.load.all to: AbstractSubscriber(messageType=editions.load.all)
+15:40:31.582 [JavaFX Application Thread] INFO  - accepted message: CommunicateRequest=types.load.allresponseType='types.receive.all
+15:40:31.583 [Scheduler thread] INFO  - forwarded: CommunicateRequest=types.load.allresponseType='types.receive.all to: AbstractSubscriber(messageType=types.load.all)
+15:40:31.590 [pool-3-thread-2] INFO  - received message: Message=editions.load.all
+15:40:31.592 [pool-3-thread-3] INFO  - received message: CommunicateRequest=types.load.allresponseType='types.receive.all
+15:40:31.796 [pool-3-thread-1] INFO  - accepted message: ContentMessage(type=cards.receive.all)
+15:40:31.796 [Scheduler thread] INFO  - forwarded: ContentMessage(type=cards.receive.all) to: AbstractContentSubscriber(messageType=cards.receive.all)
+15:40:31.797 [pool-3-thread-1] INFO  - received message: ContentMessage(type=cards.receive.all)
+15:40:31.798 [pool-3-thread-2] INFO  - accepted message: ContentMessage(type=editions.receive.all)
+15:40:31.798 [pool-3-thread-3] INFO  - accepted message: ContentMessage(type=types.receive.all)
+15:40:31.798 [Scheduler thread] INFO  - forwarded: ContentMessage(type=editions.receive.all) to: AbstractContentSubscriber(messageType=editions.receive.all)
+15:40:31.798 [pool-3-thread-1] INFO  - received message: ContentMessage(type=editions.receive.all)
+15:40:31.799 [Scheduler thread] INFO  - forwarded: ContentMessage(type=types.receive.all) to: AbstractContentSubscriber(messageType=types.receive.all)
+15:40:31.799 [pool-3-thread-2] INFO  - received message: ContentMessage(type=types.receive.all)
+15:40:47.027 [JavaFX Application Thread] INFO  - accepted message: Message=closeBus
+15:40:47.030 [Scheduler thread] INFO  - Termination of the Bus
+15:40:48.030 [Scheduler thread] ERROR - Termination of the Bus did not success.
+15:40:48.030 [Scheduler thread] ERROR - null
+15:40:48.031 [Scheduler thread] ERROR - [Ljava.lang.StackTraceElement;@339bfd39

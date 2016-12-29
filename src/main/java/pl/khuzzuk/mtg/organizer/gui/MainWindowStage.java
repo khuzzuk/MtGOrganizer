@@ -1,6 +1,5 @@
 package pl.khuzzuk.mtg.organizer.gui;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,7 +32,6 @@ public class MainWindowStage extends Stage {
         }
         setOnCloseRequest(e -> {
             close();
-            Platform.exit();
             dao.close();
             bus.closeBus();});
     }

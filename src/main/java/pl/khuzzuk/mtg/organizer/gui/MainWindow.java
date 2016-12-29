@@ -11,9 +11,13 @@ import java.util.ResourceBundle;
 
 public class MainWindow implements Initializable {
     private Bus bus;
+    private Properties messages;
     @FXML
     private SplitPane editions;
-    private Properties messages;
+    @FXML
+    private SplitPane types;
+    @FXML
+    private SplitPane cards;
 
     public MainWindow(Bus bus, Properties messages) {
         this.bus = bus;

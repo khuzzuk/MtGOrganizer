@@ -14,8 +14,14 @@
         </Menu>
     </MenuBar>
     <TabPane GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+        <Tab text="Karty">
+            <fx:include source="cardsPane.fxml" fx:id="cards"/>
+        </Tab>
         <Tab text="Edycje">
             <fx:include source="editionsPane.fxml" fx:id="editions"/>
+        </Tab>
+        <Tab text="Typy">
+            <fx:include source="typesPane.fxml" fx:id="types"/>
         </Tab>
     </TabPane>
 </GridPane>

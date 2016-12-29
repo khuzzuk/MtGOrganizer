@@ -2,7 +2,6 @@ package pl.khuzzuk.mtg.organizer.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import pl.khuzzuk.dao.DAO;
 import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.dm.Edition;
 
@@ -16,8 +15,8 @@ public class EditionsPaneController extends ListedController<Edition> {
     @Numeric
     TextField year;
 
-    public EditionsPaneController(Bus bus, DAO dao, Properties messages) {
-        super(bus, dao, messages);
+    public EditionsPaneController(Bus bus, Properties messages) {
+        super(bus, messages);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class EditionsPaneController extends ListedController<Edition> {
 
     @Override
     void saveElement(Edition edition) {
-        bus.send(messages.getProperty("editions.save.named"), messages.getProperty("editions.load.all"), edition);
+        bus.send(messages.getProperty("editions.save.named"), messages.getProperty("editions.receive.all"), edition);
     }
 
     @Override
@@ -53,5 +52,10 @@ public class EditionsPaneController extends ListedController<Edition> {
         edition.setName(name.getText());
         edition.setYear(Integer.parseInt(year.getText()));
         return edition;
+    }
+
+    @Override
+    void deleteElement(Edition edition) {
+        bus.send(messages.getProperty("editions.delete.named"), messages.getProperty("editions.receive.all"), edition);
     }
 }

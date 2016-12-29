@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import pl.khuzzuk.dao.DAO;
 import pl.khuzzuk.messaging.Bus;
+import pl.khuzzuk.mtg.organizer.dm.Card;
 import pl.khuzzuk.mtg.organizer.dm.Edition;
+import pl.khuzzuk.mtg.organizer.dm.Type;
 import pl.khuzzuk.mtg.organizer.gui.ControllersFactoryFacade;
 import pl.khuzzuk.mtg.organizer.gui.MainWindowStage;
 
@@ -34,12 +36,36 @@ public class Start extends Application {
 
     private void initDao() {
         dao = new DAO();
-        dao.initResolvers(Edition.class);
+        dao.initResolvers(Edition.class, Type.class, Card.class);
         bus.setReaction(messages.getProperty("editions.load.all"),
                 () -> bus.send(messages.getProperty("editions.receive.all"), dao.getAllEntities(Edition.class)));
         bus.setResponseResolver(messages.getProperty("editions.save.named"), e -> {
             dao.saveEntity((Edition) e);
             return dao.getAllEntities(Edition.class);
+        });
+        bus.setResponseResolver(messages.getProperty("editions.delete.named"), e -> {
+            dao.removeEntity((Edition) e);
+            return dao.getAllEntities(Edition.class);
+        });
+
+        bus.setResponse(messages.getProperty("types.load.all"), () -> dao.getAllEntities(Type.class));
+        bus.setResponseResolver(messages.getProperty("types.save.named"), t -> {
+            dao.saveEntity((Type) t);
+            return dao.getAllEntities(Type.class);
+        });
+        bus.setResponseResolver(messages.getProperty("types.delete.named"), t -> {
+            dao.removeEntity((Type) t);
+            return dao.getAllEntities(Type.class);
+        });
+
+        bus.setResponse(messages.getProperty("cards.load.all"), () -> dao.getAllEntities(Card.class));
+        bus.setResponseResolver(messages.getProperty("cards.save.named"), c -> {
+            dao.saveEntity((Card) c);
+            return dao.getAllEntities(Card.class);
+        });
+        bus.setResponseResolver(messages.getProperty("cards.delete.named"), c -> {
+            dao.removeEntity((Card) c);
+            return dao.getAllEntities(Card.class);
         });
     }
 }

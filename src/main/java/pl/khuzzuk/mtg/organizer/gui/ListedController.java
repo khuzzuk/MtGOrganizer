@@ -3,7 +3,6 @@ package pl.khuzzuk.mtg.organizer.gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import pl.khuzzuk.dao.DAO;
 import pl.khuzzuk.dao.Named;
 import pl.khuzzuk.messaging.Bus;
 
@@ -13,7 +12,6 @@ import java.util.function.Consumer;
 
 abstract class ListedController<T extends Named<String>> implements InitController {
     Bus bus;
-    DAO dao;
     Properties messages;
     Consumer<T> selectAction;
     Consumer<T> saveAction;
@@ -23,12 +21,12 @@ abstract class ListedController<T extends Named<String>> implements InitControll
     @FXML
     TextField name;
 
-    ListedController(Bus bus, DAO dao, Properties messages) {
+    ListedController(Bus bus, Properties messages) {
         this.bus = bus;
-        this.dao = dao;
         this.messages = messages;
         selectAction = this::load;
         saveAction = this::saveElement;
+        deleteAction = this::deleteElement;
     }
 
     void load(T t) {
@@ -38,6 +36,8 @@ abstract class ListedController<T extends Named<String>> implements InitControll
     abstract void saveElement(T t);
 
     abstract T createElement();
+
+    abstract void deleteElement(T t);
 
     @FXML
     void clear() {

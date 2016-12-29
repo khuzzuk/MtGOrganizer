@@ -24,8 +24,12 @@ public class ControllersFactoryFacade implements Callback<Class<?>, Object> {
     public void init() {
         factories = new HashMap<>();
         factories.put(MainWindow.class, new MainWindow(bus, messages));
-        ListedController<?> controller = new EditionsPaneController(bus, dao, messages);
+        ListedController<?> controller = new EditionsPaneController(bus, messages);
         factories.put(EditionsPaneController.class, controller);
+        controller = new TypesPaneController(bus, messages);
+        factories.put(TypesPaneController.class, controller);
+        controller = new CardsPaneController(bus, messages);
+        factories.put(CardsPaneController.class, controller);
     }
 
     @Override
