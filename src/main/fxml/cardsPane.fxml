@@ -20,8 +20,9 @@
         </padding>
         <Label text="Nazwa"/>
         <TextField fx:id="name" GridPane.columnIndex="1"/>
-        <ImageView fx:id="cardView" GridPane.rowIndex="1" GridPane.rowSpan="7" GridPane.columnSpan="2"/>
-        <HBox GridPane.rowIndex="8">
+        <ImageView fx:id="cardView" GridPane.rowIndex="1" GridPane.columnSpan="2"/>
+        <
+        <HBox GridPane.rowIndex="2">
             <Button text="Dodaj obraz" onAction="#addImage"/>
             <Button text="Zapisz" onAction="#save"/>
             <Button text="Nowy" onAction="#clear"/>

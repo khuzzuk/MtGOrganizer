@@ -68,4 +68,12 @@ public class Start extends Application {
             return dao.getAllEntities(Card.class);
         });
     }
+
+    private void initPicManager() {
+        PicIdManager manager = new PicIdManager();
+        bus.setReaction(messages.getProperty("pics.manager.init"), manager::init);
+        bus.send(messages.getProperty("pics.manager.init"));
+        bus.setResponseResolver(messages.getProperty("pics.manager.save"), manager::saveFile);
+        bus.setReaction(messages.getProperty("pics.manager.remove.last"), manager::removeLast);
+    }
 }

@@ -8,6 +8,7 @@
 
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <SplitPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
            maxHeight="Infinity" maxWidth="Infinity"
            fx:controller="pl.khuzzuk.mtg.organizer.gui.TypesPaneController"
@@ -19,7 +20,9 @@
         </padding>
         <Label text="Nazwa"/>
         <TextField fx:id="name" GridPane.columnIndex="1"/>
-        <HBox GridPane.rowIndex="2">
+        <Label text="Rodzaj"/>
+        <ComboBox fx:id="primaryType"/>
+        <HBox GridPane.rowIndex="3">
             <Button text="Zapisz" onAction="#save"/>
             <Button text="Nowy" onAction="#clear"/>
             <Button text="Usuń" onAction="#delete"/>

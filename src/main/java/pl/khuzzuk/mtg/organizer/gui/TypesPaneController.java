@@ -1,6 +1,8 @@
 package pl.khuzzuk.mtg.organizer.gui;
 
+import javafx.scene.control.ComboBox;
 import pl.khuzzuk.messaging.Bus;
+import pl.khuzzuk.mtg.organizer.dm.PrimaryType;
 import pl.khuzzuk.mtg.organizer.dm.Type;
 
 import java.net.URL;
@@ -9,6 +11,8 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class TypesPaneController extends ListedController<Type> {
+
+    public ComboBox<PrimaryType> primaryType;
 
     public TypesPaneController(Bus bus, Properties messages) {
         super(bus, messages);
@@ -19,6 +23,7 @@ public class TypesPaneController extends ListedController<Type> {
         super.initialize(location, resources);
         bus.setGuiReaction(messages.getProperty("types.receive.all"), o -> loadAll((Collection<Type>) o));
         bus.send(messages.getProperty("types.load.all"), messages.getProperty("types.receive.all"));
+        ComboBoxHandler.fill(PrimaryType.SET, primaryType);
     }
 
     @Override
@@ -30,11 +35,24 @@ public class TypesPaneController extends ListedController<Type> {
     Type createElement() {
         Type type = new Type();
         type.setName(name.getText());
+        type.setPrimaryType(ComboBoxHandler.getOrNull(primaryType));
         return type;
     }
 
     @Override
     void deleteElement(Type type) {
         bus.send(messages.getProperty("types.delete.named"), messages.getProperty("types.receive.all"), type);
+    }
+
+    @Override
+    void load(Type type) {
+        super.load(type);
+        ComboBoxHandler.selectOrEmpty(primaryType, type.getPrimaryType());
+    }
+
+    @Override
+    void clear() {
+        super.clear();
+        primaryType.getSelectionModel().clearSelection();
     }
 }

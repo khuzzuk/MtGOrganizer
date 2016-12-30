@@ -1,5 +1,6 @@
 package pl.khuzzuk.mtg.organizer.dm;
 
+import org.hibernate.annotations.NaturalId;
 import pl.khuzzuk.dao.Named;
 
 import javax.persistence.Entity;
@@ -11,7 +12,9 @@ public class Type implements Named<String> {
     @Id
     @GeneratedValue
     private long id;
+    @NaturalId
     private String name;
+    private PrimaryType primaryType;
 
     @Override
     public long getId() {
@@ -31,6 +34,14 @@ public class Type implements Named<String> {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    public PrimaryType getPrimaryType() {
+        return primaryType;
+    }
+
+    public void setPrimaryType(PrimaryType primaryType) {
+        this.primaryType = primaryType;
     }
 
     @Override

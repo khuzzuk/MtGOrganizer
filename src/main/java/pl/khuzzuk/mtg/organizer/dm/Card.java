@@ -1,8 +1,10 @@
 package pl.khuzzuk.mtg.organizer.dm;
 
+import org.hibernate.annotations.NaturalId;
 import pl.khuzzuk.dao.Named;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,6 +12,7 @@ public class Card implements Named<String> {
     @Id
     @GeneratedValue
     private long id;
+    @NaturalId
     private String name;
     private byte white;
     private byte green;
@@ -21,6 +24,7 @@ public class Card implements Named<String> {
     private Edition edition;
     private String signature;
     private CardRarity rarity;
+    private PrimaryType primaryType;
     @ManyToMany
     private Set<Type> types;
     private int picId;
@@ -118,8 +122,23 @@ public class Card implements Named<String> {
         this.rarity = rarity;
     }
 
+    public PrimaryType getPrimaryType() {
+        return primaryType;
+    }
+
+    public void setPrimaryType(PrimaryType primaryType) {
+        this.primaryType = primaryType;
+    }
+
     public Set<Type> getTypes() {
         return types;
+    }
+
+    public void addType(Type type) {
+        if (types == null) {
+            types = new HashSet<>();
+        }
+        types.add(type);
     }
 
     public void setTypes(Set<Type> types) {

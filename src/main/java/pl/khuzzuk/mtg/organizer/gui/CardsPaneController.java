@@ -18,6 +18,8 @@ import java.util.ResourceBundle;
 public class CardsPaneController extends ListedController<Card> {
     @FXML
     private ImageView cardView;
+    private File picFile;
+    private int currentPicId;
 
     public CardsPaneController(Bus bus, Properties messages) {
         super(bus, messages);
@@ -28,6 +30,7 @@ public class CardsPaneController extends ListedController<Card> {
         super.initialize(location, resources);
         bus.setGuiReaction(messages.getProperty("cards.receive.all"), o -> loadAll((Collection<Card>) o));
         bus.send(messages.getProperty("cards.load.all"), messages.getProperty("cards.receive.all"));
+        bus.setGuiReaction(messages.getProperty("pics.manager.save.confirm"), i -> showResults((Integer) i));
         cardView.setFitWidth(500);
         cardView.setFitHeight(700);
     }
@@ -41,6 +44,7 @@ public class CardsPaneController extends ListedController<Card> {
     Card createElement() {
         Card card = new Card();
         card.setName(name.getText());
+        card.setPicId(currentPicId);
         return card;
     }
 
@@ -57,15 +61,35 @@ public class CardsPaneController extends ListedController<Card> {
     @Override
     void clear() {
         super.clear();
+        currentPicId = 0;
     }
 
     @FXML
     void addImage() throws FileNotFoundException {
+        if (currentPicId > 0) {
+            bus.send(messages.getProperty("pics.manager.remove.last"));
+        }
         FileChooser chooser = new FileChooser();
-        File file = chooser.showOpenDialog(null);
-        if (file != null && file.exists()) {
-            Image image = new Image(new FileInputStream(file));
+        picFile = chooser.showOpenDialog(null);
+        if (picFile != null && picFile.exists()) {
+            bus.send(messages.getProperty("pics.manager.save"), messages.getProperty("pics.manager.save.confirm"), picFile);
+        }
+    }
+
+    private void showResults(Integer value) {
+        if (value < 1) {
+            showError("Błąd zapisu", "plik nie został skopiowany");
+            bus.send(messages.getProperty("pics.manager.remove.last"));
+            return;
+        }
+        currentPicId = value;
+        try {
+            Image image = new Image(new FileInputStream(picFile));
             cardView.setImage(image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            showError("Błąd wczytywania pliku", e.getMessage());
+            bus.send(messages.getProperty("pics.manager.remove.last"));
         }
     }
 }

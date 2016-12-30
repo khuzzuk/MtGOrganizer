@@ -1,6 +1,7 @@
 package pl.khuzzuk.mtg.organizer.gui;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import pl.khuzzuk.dao.Named;
@@ -75,5 +76,12 @@ abstract class ListedController<T extends Named<String>> implements InitControll
 
     T getSelectedItem() {
         return items.getSelectionModel().getSelectedItem();
+    }
+
+    void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.show();
     }
 }
