@@ -52,7 +52,7 @@
             <Image url="Mana_N.png"/>
         </ImageView>
         <TextField fx:id="colorlessNumber" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
-        <HBox GridPane.rowIndex="7" GridPane.columnSpan="2">
+        <HBox GridPane.rowIndex="8" GridPane.columnSpan="2">
             <Button text="Dodaj obraz" onAction="#addImage"/>
             <Button text="Zapisz" onAction="#save"/>
             <Button text="Nowy" onAction="#clear"/>

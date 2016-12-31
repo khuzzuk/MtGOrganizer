@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import pl.khuzzuk.messaging.Bus;
+import pl.khuzzuk.mtg.organizer.FileNameManager;
 import pl.khuzzuk.mtg.organizer.dm.Card;
 
 import java.io.File;
@@ -71,7 +72,7 @@ public class CardsPaneController extends ListedController<Card> {
         super.load(card);
         if (card.getPicId() > 0) {
             try {
-                loadImage(new File("db/pics/" + card.getPicId() + ".png"));
+                loadImage(new File(FileNameManager.getFileName(card.getPicId())));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 showError("Błąd wczytywania pliku", e.getMessage());

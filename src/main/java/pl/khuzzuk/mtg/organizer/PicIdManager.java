@@ -3,6 +3,9 @@ package pl.khuzzuk.mtg.organizer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+
+import static pl.khuzzuk.mtg.organizer.FileNameManager.getFileName;
 
 class PicIdManager {
     private int currentId;
@@ -24,6 +27,7 @@ class PicIdManager {
             throw new IllegalStateException("no files in db/pics");
         }
 
+        Arrays.sort(files);
         String name = files[files.length - 1].getName();
         int pos = name.lastIndexOf(".");
         if (pos > 0) {
@@ -36,7 +40,7 @@ class PicIdManager {
         if (!file.getPath().endsWith(".jpg") && !file.getPath().endsWith(".jpeg")) {
             return -1;
         }
-        File out = new File("db/pics/" + currentId++ + ".jpg");
+        File out = new File(getFileName(currentId++));
         try {
             Files.copy(file.toPath(), out.toPath());
             return currentId - 1;

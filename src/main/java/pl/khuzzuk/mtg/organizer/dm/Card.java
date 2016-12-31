@@ -160,4 +160,9 @@ public class Card implements Named<String> {
     public void setRevPicId(int revPicId) {
         this.revPicId = revPicId;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
