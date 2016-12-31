@@ -31,6 +31,7 @@ public class Start extends Application {
         initDao();
         ControllersFactoryFacade facade = new ControllersFactoryFacade(bus, dao, messages);
         facade.init();
+        initPicManager();
         new MainWindowStage(facade, primaryStage, bus, dao).show();
     }
 
@@ -75,5 +76,6 @@ public class Start extends Application {
         bus.send(messages.getProperty("pics.manager.init"));
         bus.setResponseResolver(messages.getProperty("pics.manager.save"), manager::saveFile);
         bus.setReaction(messages.getProperty("pics.manager.remove.last"), manager::removeLast);
+        bus.setReaction(messages.getProperty("pics.manager.remove.numbered"), manager::removeNumbered);
     }
 }

@@ -10,3 +10,4 @@ gen
 .idea/
 db/
 target
+bus.log

@@ -1,6 +1,7 @@
 package pl.khuzzuk.mtg.organizer.gui;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -16,6 +17,18 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class CardsPaneController extends ListedController<Card> {
+    @FXML
+    private TextField blueNumber;
+    @FXML
+    private TextField greenNumber;
+    @FXML
+    private TextField redNumber;
+    @FXML
+    private TextField blackNumber;
+    @FXML
+    private TextField colorlessNumber;
+    @FXML
+    private TextField whiteNumber;
     @FXML
     private ImageView cardView;
     private File picFile;
@@ -56,6 +69,14 @@ public class CardsPaneController extends ListedController<Card> {
     @Override
     void load(Card card) {
         super.load(card);
+        if (card.getPicId() > 0) {
+            try {
+                loadImage(new File("db/pics/" + card.getPicId() + ".png"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                showError("Błąd wczytywania pliku", e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -67,9 +88,11 @@ public class CardsPaneController extends ListedController<Card> {
     @FXML
     void addImage() throws FileNotFoundException {
         if (currentPicId > 0) {
-            bus.send(messages.getProperty("pics.manager.remove.last"));
+            bus.send(messages.getProperty("pics.manager.remove.numbered"), currentPicId);
+            currentPicId = 0;
         }
         FileChooser chooser = new FileChooser();
+        chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("*.jpg", "*.jpg", "*.jpeg"));
         picFile = chooser.showOpenDialog(null);
         if (picFile != null && picFile.exists()) {
             bus.send(messages.getProperty("pics.manager.save"), messages.getProperty("pics.manager.save.confirm"), picFile);
@@ -84,12 +107,16 @@ public class CardsPaneController extends ListedController<Card> {
         }
         currentPicId = value;
         try {
-            Image image = new Image(new FileInputStream(picFile));
-            cardView.setImage(image);
+            loadImage(picFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             showError("Błąd wczytywania pliku", e.getMessage());
             bus.send(messages.getProperty("pics.manager.remove.last"));
         }
+    }
+
+    private void loadImage(File file) throws FileNotFoundException {
+        Image image = new Image(new FileInputStream(file));
+        cardView.setImage(image);
     }
 }
