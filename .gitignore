@@ -11,3 +11,4 @@ gen
 db/
 target
 bus.log
+logger.log

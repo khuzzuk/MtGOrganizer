@@ -31,6 +31,7 @@ abstract class ListedController<T extends Named<String>> implements InitControll
     }
 
     void load(T t) {
+        clear();
         name.setText(t.getName());
     }
 
@@ -60,6 +61,7 @@ abstract class ListedController<T extends Named<String>> implements InitControll
 
     public void delete() {
         process(deleteAction);
+        clear();
     }
 
     private void process(Consumer<T> action) {

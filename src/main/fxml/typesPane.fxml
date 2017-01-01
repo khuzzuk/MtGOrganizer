@@ -20,8 +20,8 @@
         </padding>
         <Label text="Nazwa"/>
         <TextField fx:id="name" GridPane.columnIndex="1"/>
-        <Label text="Rodzaj"/>
-        <ComboBox fx:id="primaryType"/>
+        <Label text="Rodzaj" GridPane.rowIndex="1"/>
+        <ComboBox fx:id="primaryType" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
         <HBox GridPane.rowIndex="3">
             <Button text="Zapisz" onAction="#save"/>
             <Button text="Nowy" onAction="#clear"/>

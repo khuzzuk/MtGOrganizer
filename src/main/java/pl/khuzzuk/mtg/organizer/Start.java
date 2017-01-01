@@ -7,8 +7,7 @@ import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.dm.Card;
 import pl.khuzzuk.mtg.organizer.dm.Edition;
 import pl.khuzzuk.mtg.organizer.dm.Type;
-import pl.khuzzuk.mtg.organizer.gui.ControllersFactoryFacade;
-import pl.khuzzuk.mtg.organizer.gui.MainWindowStage;
+import pl.khuzzuk.mtg.organizer.gui.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -33,13 +32,14 @@ public class Start extends Application {
         facade.init();
         initPicManager();
         new MainWindowStage(facade, primaryStage, bus, dao).show();
+        new ChooserStage(new TypesChooserController(bus, messages)).init();
+        new ChooserStage(new EditionChooserController(bus, messages)).init();
     }
 
     private void initDao() {
         dao = new DAO();
         dao.initResolvers(Edition.class, Type.class, Card.class);
-        bus.setReaction(messages.getProperty("editions.load.all"),
-                () -> bus.send(messages.getProperty("editions.receive.all"), dao.getAllEntities(Edition.class)));
+        bus.setResponse(messages.getProperty("editions.load.all"), () -> dao.getAllEntities(Edition.class));
         bus.setResponseResolver(messages.getProperty("editions.save.named"), e -> {
             dao.saveEntity((Edition) e);
             return dao.getAllEntities(Edition.class);

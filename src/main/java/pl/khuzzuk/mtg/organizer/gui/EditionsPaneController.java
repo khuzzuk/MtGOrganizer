@@ -6,7 +6,6 @@ import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.dm.Edition;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -22,8 +21,8 @@ public class EditionsPaneController extends ListedController<Edition> {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        bus.setGuiReaction(messages.getProperty("editions.receive.all"), o -> loadAll((Collection<Edition>) o));
-        bus.send(messages.getProperty("editions.load.all"));
+        bus.setGuiReaction(messages.getProperty("editions.receive.all"), this::loadAll);
+        bus.send(messages.getProperty("editions.load.all"), messages.getProperty("editions.receive.all"));
     }
 
     @Override

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Properties>
-        <Property name="logFile">app</Property>
+        <Property name="busLogFile">bus</Property>
+        <Property name="appFile">logger</Property>
     </Properties>
     <Appenders>
+        <File name="logToBusFile"
+              fileName="${busLogFile}.log"
+              append="false">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n" />
+        </File>
         <File name="logToFile"
-                     fileName="${logFile}.log"
-                     append="false">
+              fileName="${appFile}.log"
+              append="false">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n" />
         </File>
         <Console name="STDOUT">
@@ -18,6 +24,10 @@
             <AppenderRef ref="STDOUT"/>
         </Root>
         <Logger level="trace" name="MessageLogger" additivity="false">
+            <ThresholdFilter level="info"/>
+            <AppenderRef ref="logToBusFile"/>
+        </Logger>
+        <Logger level="trace" name="generalLogger" additivity="false">
             <ThresholdFilter level="info"/>
             <AppenderRef ref="logToFile"/>
         </Logger>

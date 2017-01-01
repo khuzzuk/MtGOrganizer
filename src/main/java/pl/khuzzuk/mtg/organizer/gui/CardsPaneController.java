@@ -1,13 +1,17 @@
 package pl.khuzzuk.mtg.organizer.gui;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.FileNameManager;
 import pl.khuzzuk.mtg.organizer.dm.Card;
+import pl.khuzzuk.mtg.organizer.dm.Edition;
+import pl.khuzzuk.mtg.organizer.dm.PrimaryType;
+import pl.khuzzuk.mtg.organizer.dm.Type;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,20 +20,34 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class CardsPaneController extends ListedController<Card> {
     @FXML
-    private TextField blueNumber;
+    private Button editionButton;
+    private Edition currentEdition;
     @FXML
-    private TextField greenNumber;
+    private TableView<Type> types;
     @FXML
-    private TextField redNumber;
+    private ComboBox<PrimaryType> primaryType;
     @FXML
-    private TextField blackNumber;
+    @Numeric
+    TextField blueNumber;
     @FXML
-    private TextField colorlessNumber;
+    @Numeric
+    TextField greenNumber;
     @FXML
-    private TextField whiteNumber;
+    @Numeric
+    TextField redNumber;
+    @FXML
+    @Numeric
+    TextField blackNumber;
+    @FXML
+    @Numeric
+    TextField colorlessNumber;
+    @FXML
+    @Numeric
+    TextField whiteNumber;
     @FXML
     private ImageView cardView;
     private File picFile;
@@ -40,13 +58,21 @@ public class CardsPaneController extends ListedController<Card> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        bus.setGuiReaction(messages.getProperty("cards.receive.all"), o -> loadAll((Collection<Card>) o));
+        bus.setGuiReaction(messages.getProperty("cards.receive.all"), this::loadAll);
         bus.send(messages.getProperty("cards.load.all"), messages.getProperty("cards.receive.all"));
-        bus.setGuiReaction(messages.getProperty("pics.manager.save.confirm"), i -> showResults((Integer) i));
+        bus.setGuiReaction(messages.getProperty("pics.manager.save.confirm"), this::showResults);
+        bus.setGuiReaction(messages.getProperty("cards.receive.types.chosen"), this::loadTypes);
+        bus.setGuiReaction(messages.getProperty("cards.receive.editions.chosen"), this::loadEdition);
         cardView.setFitWidth(500);
         cardView.setFitHeight(700);
+        ComboBoxHandler.fill(PrimaryType.SET, primaryType);
+
+        ((TableColumn<Type, String>) types.getColumns().get(0))
+                .setCellValueFactory(param -> new SimpleStringProperty(
+                        param.getValue().getName()));
     }
 
     @Override
@@ -59,6 +85,14 @@ public class CardsPaneController extends ListedController<Card> {
         Card card = new Card();
         card.setName(name.getText());
         card.setPicId(currentPicId);
+        card.setWhite(Byte.parseByte(whiteNumber.getText()));
+        card.setBlue(Byte.parseByte(blueNumber.getText()));
+        card.setGreen(Byte.parseByte(greenNumber.getText()));
+        card.setRed(Byte.parseByte(redNumber.getText()));
+        card.setBlack(Byte.parseByte(blackNumber.getText()));
+        card.setColorless(Byte.parseByte(colorlessNumber.getText()));
+        card.setPrimaryType(ComboBoxHandler.getOrNull(primaryType));
+        card.setTypes(types.getItems().stream().collect(Collectors.toSet()));
         return card;
     }
 
@@ -70,6 +104,16 @@ public class CardsPaneController extends ListedController<Card> {
     @Override
     void load(Card card) {
         super.load(card);
+        whiteNumber.setText(card.getWhite() + "");
+        blueNumber.setText(card.getBlue() + "");
+        greenNumber.setText(card.getGreen() + "");
+        redNumber.setText(card.getRed() + "");
+        blackNumber.setText(card.getBlack() + "");
+        colorlessNumber.setText(card.getColorless() + "");
+        ComboBoxHandler.selectOrEmpty(primaryType, card.getPrimaryType());
+        types.getItems().addAll(card.getTypes());
+        editionButton.setText(card.getEdition() != null ? card.getEdition().getName() : "brak");
+        currentEdition = card.getEdition();
         if (card.getPicId() > 0) {
             try {
                 loadImage(new File(FileNameManager.getFileName(card.getPicId())));
@@ -84,6 +128,27 @@ public class CardsPaneController extends ListedController<Card> {
     void clear() {
         super.clear();
         currentPicId = 0;
+        cardView.setImage(null);
+        whiteNumber.clear();
+        blackNumber.clear();
+        blueNumber.clear();
+        redNumber.clear();
+        greenNumber.clear();
+        colorlessNumber.clear();
+        primaryType.getSelectionModel().clearSelection();
+        types.getItems().clear();
+        editionButton.setText("brak");
+        currentEdition = null;
+    }
+
+    private void loadTypes(Collection<Type> items) {
+        types.getItems().clear();
+        types.getItems().addAll(items);
+    }
+
+    private void loadEdition(Edition edition) {
+        editionButton.setText(edition.getName());
+        currentEdition = edition;
     }
 
     @FXML
@@ -119,5 +184,15 @@ public class CardsPaneController extends ListedController<Card> {
     private void loadImage(File file) throws FileNotFoundException {
         Image image = new Image(new FileInputStream(file));
         cardView.setImage(image);
+    }
+
+    @FXML
+    private void selectTypes() {
+        bus.send(messages.getProperty("types.load.all"), messages.getProperty("cards.receive.types"));
+    }
+
+    @FXML
+    private void selectEdition() {
+        bus.send(messages.getProperty("editions.load.all"), messages.getProperty("cards.receive.editions"));
     }
 }

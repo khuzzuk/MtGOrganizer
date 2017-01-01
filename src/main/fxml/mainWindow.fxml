@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
 <GridPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-          maxWidth="Infinity" maxHeight="Infinity" prefWidth="1600" prefHeight="800"
+          maxWidth="Infinity" maxHeight="Infinity" prefWidth="1600" prefHeight="900"
           fx:controller="pl.khuzzuk.mtg.organizer.gui.MainWindow">
     <MenuBar prefHeight="25.0" prefWidth="Infinity" GridPane.columnSpan="2">
         <Menu mnemonicParsing="false" text="Plik">
