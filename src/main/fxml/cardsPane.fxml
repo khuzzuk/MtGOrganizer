@@ -24,7 +24,7 @@
         </padding>
         <Label text="Nazwa"/>
         <TextField fx:id="name" GridPane.columnIndex="1"/>
-        <ImageView fx:id="cardView" GridPane.rowIndex="1" GridPane.columnSpan="2" GridPane.rowSpan="9"/>
+        <ImageView fx:id="cardView" GridPane.rowIndex="1" GridPane.columnSpan="2" GridPane.rowSpan="11"/>
         <ImageView fitHeight="50" fitWidth="50"
                    GridPane.rowIndex="1" GridPane.columnIndex="2">
             <Image url="Mana_W.png"/>
@@ -57,16 +57,22 @@
         <TextField fx:id="colorlessNumber" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
         <Label text="Typ" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
         <ComboBox fx:id="primaryType" GridPane.rowIndex="7" GridPane.columnIndex="3"/>
-        <TableView fx:id="types" GridPane.rowIndex="8" GridPane.columnIndex="2" GridPane.columnSpan="2" onMouseClicked="#selectTypes">
+        <TableView fx:id="types" GridPane.rowIndex="8" GridPane.columnIndex="2" GridPane.columnSpan="2"
+                   onMouseClicked="#selectTypes" prefHeight="200">
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
             <columns>
                 <TableColumn text="Typ"/>
             </columns>
         </TableView>
         <Label text="Edycja" GridPane.rowIndex="9" GridPane.columnIndex="2"/>
         <Button fx:id="editionButton" text="brak" GridPane.rowIndex="9" GridPane.columnIndex="3" onAction="#selectEdition"/>
-        <HBox GridPane.rowIndex="10" GridPane.columnSpan="2">
+        <Label text="rzadkość" GridPane.rowIndex="10" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="rarity" GridPane.rowIndex="10" GridPane.columnIndex="3"/>
+        <Label text="sygnatura" GridPane.rowIndex="11" GridPane.columnIndex="2"/>
+        <TextField fx:id="signature" GridPane.rowIndex="11" GridPane.columnIndex="3"/>
+        <HBox GridPane.rowIndex="12" GridPane.columnSpan="2">
             <Button text="Dodaj obraz" onAction="#addImage"/>
             <Button text="Zapisz" onAction="#save"/>
             <Button text="Nowy" onAction="#clear"/>

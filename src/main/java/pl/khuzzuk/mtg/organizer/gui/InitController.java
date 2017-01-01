@@ -30,7 +30,7 @@ public interface InitController extends Initializable {
     }
 
     static void setIntegerListenerToTextField(TextField field) {
-        field.textProperty().addListener((obs, oldV, newV) -> field.setText(Pattern.matches("[+-]?([0-9].)([0-9]*)", newV) ? newV : oldV));
+        field.textProperty().addListener((obs, oldV, newV) -> field.setText(Pattern.matches("[+-]?([0-9]*)", newV) ? newV : oldV));
     }
 
     static void setFloatListenerToTextField(TextField field) {

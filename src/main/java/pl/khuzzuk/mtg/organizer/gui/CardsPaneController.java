@@ -8,10 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.FileNameManager;
-import pl.khuzzuk.mtg.organizer.dm.Card;
-import pl.khuzzuk.mtg.organizer.dm.Edition;
-import pl.khuzzuk.mtg.organizer.dm.PrimaryType;
-import pl.khuzzuk.mtg.organizer.dm.Type;
+import pl.khuzzuk.mtg.organizer.dm.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +20,10 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class CardsPaneController extends ListedController<Card> {
+    @FXML
+    private ComboBox<CardRarity> rarity;
+    @FXML
+    private TextField signature;
     @FXML
     private Button editionButton;
     private Edition currentEdition;
@@ -69,6 +70,7 @@ public class CardsPaneController extends ListedController<Card> {
         cardView.setFitWidth(500);
         cardView.setFitHeight(700);
         ComboBoxHandler.fill(PrimaryType.SET, primaryType);
+        ComboBoxHandler.fill(CardRarity.SET, rarity);
 
         ((TableColumn<Type, String>) types.getColumns().get(0))
                 .setCellValueFactory(param -> new SimpleStringProperty(
@@ -93,6 +95,9 @@ public class CardsPaneController extends ListedController<Card> {
         card.setColorless(Byte.parseByte(colorlessNumber.getText()));
         card.setPrimaryType(ComboBoxHandler.getOrNull(primaryType));
         card.setTypes(types.getItems().stream().collect(Collectors.toSet()));
+        card.setEdition(currentEdition);
+        card.setRarity(ComboBoxHandler.getOrNull(rarity));
+        card.setSignature(signature.getText());
         return card;
     }
 
@@ -103,6 +108,7 @@ public class CardsPaneController extends ListedController<Card> {
 
     @Override
     void load(Card card) {
+        clear();
         super.load(card);
         whiteNumber.setText(card.getWhite() + "");
         blueNumber.setText(card.getBlue() + "");
@@ -114,7 +120,10 @@ public class CardsPaneController extends ListedController<Card> {
         types.getItems().addAll(card.getTypes());
         editionButton.setText(card.getEdition() != null ? card.getEdition().getName() : "brak");
         currentEdition = card.getEdition();
+        ComboBoxHandler.selectOrEmpty(rarity, card.getRarity());
+        signature.setText(card.getSignature());
         if (card.getPicId() > 0) {
+            currentPicId = card.getPicId();
             try {
                 loadImage(new File(FileNameManager.getFileName(card.getPicId())));
             } catch (FileNotFoundException e) {
@@ -139,6 +148,8 @@ public class CardsPaneController extends ListedController<Card> {
         types.getItems().clear();
         editionButton.setText("brak");
         currentEdition = null;
+        rarity.getSelectionModel().clearSelection();
+        signature.clear();
     }
 
     private void loadTypes(Collection<Type> items) {
