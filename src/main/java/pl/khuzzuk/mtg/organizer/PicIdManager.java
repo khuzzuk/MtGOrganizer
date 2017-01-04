@@ -28,7 +28,7 @@ class PicIdManager {
         }
 
         Arrays.sort(files);
-        String name = files[files.length - 1].getName();
+        String name = files.length > 0 ? files[files.length - 1].getName() : "0";
         int pos = name.lastIndexOf(".");
         if (pos > 0) {
             name= name.substring(0, pos);

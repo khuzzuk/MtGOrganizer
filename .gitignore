@@ -12,3 +12,4 @@ db/
 target
 bus.log
 logger.log
+app.properties

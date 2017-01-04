@@ -31,7 +31,8 @@ public class Start extends Application {
         ControllersFactoryFacade facade = new ControllersFactoryFacade(bus, dao, messages);
         facade.init();
         initPicManager();
-        new MainWindowStage(facade, primaryStage, bus, dao).show();
+        initPropertiesManager();
+        new MainWindowStage(facade, primaryStage, bus, dao, messages).show();
         new ChooserStage(new TypesChooserController(bus, messages)).init();
         new ChooserStage(new EditionChooserController(bus, messages)).init();
     }
@@ -77,5 +78,9 @@ public class Start extends Application {
         bus.setResponseResolver(messages.getProperty("pics.manager.save"), manager::saveFile);
         bus.setReaction(messages.getProperty("pics.manager.remove.last"), manager::removeLast);
         bus.setReaction(messages.getProperty("pics.manager.remove.numbered"), manager::removeNumbered);
+    }
+
+    void initPropertiesManager() {
+        PropertiesManager.buildManager(bus, messages);
     }
 }

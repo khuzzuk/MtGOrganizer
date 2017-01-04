@@ -53,8 +53,9 @@ public class CardsPaneController extends ListedController<Card> {
     private ImageView cardView;
     private File picFile;
     private int currentPicId;
+    private String lastFileLocation;
 
-    public CardsPaneController(Bus bus, Properties messages) {
+    CardsPaneController(Bus bus, Properties messages) {
         super(bus, messages);
     }
 
@@ -67,6 +68,8 @@ public class CardsPaneController extends ListedController<Card> {
         bus.setGuiReaction(messages.getProperty("pics.manager.save.confirm"), this::showResults);
         bus.setGuiReaction(messages.getProperty("cards.receive.types.chosen"), this::loadTypes);
         bus.setGuiReaction(messages.getProperty("cards.receive.editions.chosen"), this::loadEdition);
+        bus.setReaction(messages.getProperty("properties.files.chooser.location"), this::setLastFileLocation);
+        bus.send(messages.getProperty("properties.get.string"), messages.getProperty("properties.files.chooser.location"), "lastLocation");
         cardView.setFitWidth(500);
         cardView.setFitHeight(700);
         ComboBoxHandler.fill(PrimaryType.SET, primaryType);
@@ -169,10 +172,15 @@ public class CardsPaneController extends ListedController<Card> {
             currentPicId = 0;
         }
         FileChooser chooser = new FileChooser();
+        if (lastFileLocation != null) {
+            chooser.setInitialDirectory(new File(lastFileLocation));
+        }
         chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("*.jpg", "*.jpg", "*.jpeg"));
         picFile = chooser.showOpenDialog(null);
         if (picFile != null && picFile.exists()) {
             bus.send(messages.getProperty("pics.manager.save"), messages.getProperty("pics.manager.save.confirm"), picFile);
+            lastFileLocation = picFile.getParent();
+            bus.send(messages.getProperty("properties.files.chooser.location.set"), (Object) lastFileLocation);
         }
     }
 
@@ -205,5 +213,9 @@ public class CardsPaneController extends ListedController<Card> {
     @FXML
     private void selectEdition() {
         bus.send(messages.getProperty("editions.load.all"), messages.getProperty("cards.receive.editions"));
+    }
+
+    public void setLastFileLocation(String lastFileLocation) {
+        this.lastFileLocation = lastFileLocation;
     }
 }

@@ -24,33 +24,34 @@
         </padding>
         <Label text="Nazwa"/>
         <TextField fx:id="name" GridPane.columnIndex="1"/>
-        <ImageView fx:id="cardView" GridPane.rowIndex="1" GridPane.columnSpan="2" GridPane.rowSpan="11"/>
-        <ImageView fitHeight="50" fitWidth="50"
+        <ImageView fx:id="cardView" GridPane.rowIndex="1" GridPane.columnSpan="2" GridPane.rowSpan="12"
+        fitWidth="300" fitHeight="500"/>
+        <ImageView fitHeight="40" fitWidth="40"
                    GridPane.rowIndex="1" GridPane.columnIndex="2">
             <Image url="Mana_W.png"/>
         </ImageView>
         <TextField fx:id="whiteNumber" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-        <ImageView fitHeight="50" fitWidth="50"
+        <ImageView fitHeight="40" fitWidth="40"
                    GridPane.rowIndex="2" GridPane.columnIndex="2">
             <Image url="Mana_U.png"/>
         </ImageView>
         <TextField fx:id="blueNumber" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-        <ImageView fitHeight="50" fitWidth="50"
+        <ImageView fitHeight="40" fitWidth="40"
                    GridPane.rowIndex="3" GridPane.columnIndex="2">
             <Image url="Mana_G.png"/>
         </ImageView>
         <TextField fx:id="greenNumber" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-        <ImageView fitHeight="50" fitWidth="50"
+        <ImageView fitHeight="40" fitWidth="40"
                    GridPane.rowIndex="4" GridPane.columnIndex="2">
             <Image url="Mana_R.png"/>
         </ImageView>
         <TextField fx:id="redNumber" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
-        <ImageView fitHeight="50" fitWidth="50"
+        <ImageView fitHeight="40" fitWidth="40"
                    GridPane.rowIndex="5" GridPane.columnIndex="2">
             <Image url="Mana_B.png"/>
         </ImageView>
         <TextField fx:id="blackNumber" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
-        <ImageView fitHeight="50" fitWidth="50"
+        <ImageView fitHeight="40" fitWidth="40"
                    GridPane.rowIndex="6" GridPane.columnIndex="2">
             <Image url="Mana_N.png"/>
         </ImageView>

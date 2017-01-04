@@ -12,14 +12,18 @@ import pl.khuzzuk.dao.DAO;
 import pl.khuzzuk.messaging.Bus;
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class MainWindowStage extends Stage {
+    private Properties messages;
     private Bus bus;
     private DAO dao;
-    public MainWindowStage(ControllersFactoryFacade factoryFacade, Window parent, Bus bus, DAO dao) {
+
+    public MainWindowStage(ControllersFactoryFacade factoryFacade, Window parent, Bus bus, DAO dao, Properties messages) {
         super(StageStyle.DECORATED);
         this.bus = bus;
         this.dao = dao;
+        this.messages = messages;
         initOwner(parent);
         initModality(Modality.WINDOW_MODAL);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainWindow.fxml"));
@@ -35,6 +39,40 @@ public class MainWindowStage extends Stage {
             close();
             Platform.exit();
             dao.close();
-            bus.closeBus();});
+            bus.closeBus();
+        });
+        setBusReaction();
+        saveWindowLocation();
+    }
+
+    private void setBusReaction() {
+        bus.setGuiReaction(messages.getProperty("properties.window.posx"), this::setX);
+        bus.setGuiReaction(messages.getProperty("properties.window.posy"), this::setY);
+        bus.setGuiReaction(messages.getProperty("properties.window.width"), this::setWidth);
+        bus.setGuiReaction(messages.getProperty("properties.window.height"), this::setHeight);
+        bus.setGuiReaction(messages.getProperty("properties.window.maximized"), this::setMaximized);
+        bus.send(messages.getProperty("properties.get.double"),
+                messages.getProperty("properties.window.posx"), "posX");
+        bus.send(messages.getProperty("properties.get.double"),
+                messages.getProperty("properties.window.posy"), "posY");
+        bus.send(messages.getProperty("properties.get.double"),
+                messages.getProperty("properties.window.width"), "width");
+        bus.send(messages.getProperty("properties.get.double"),
+                messages.getProperty("properties.window.height"), "height");
+        bus.send(messages.getProperty("properties.get.boolean"),
+                messages.getProperty("properties.window.maximized"), "maximized");
+    }
+
+    private void saveWindowLocation() {
+        widthProperty().addListener((o, v1, v2) ->
+                bus.send(messages.getProperty("properties.window.width.set"), v2));
+        heightProperty().addListener((o, v1, v2) ->
+                bus.send(messages.getProperty("properties.window.height.set"), v2));
+        xProperty().addListener((o, v1, v2) ->
+                bus.send(messages.getProperty("properties.window.posx.set"), v2));
+        yProperty().addListener((o, v1, v2) ->
+                bus.send(messages.getProperty("properties.window.posy.set"), v2));
+        maximizedProperty().addListener((o, v1, v2) ->
+                bus.send(messages.getProperty("properties.window.maximized.set"), v2));
     }
 }
