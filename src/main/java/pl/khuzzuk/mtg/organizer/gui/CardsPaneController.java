@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.FileNameManager;
+import pl.khuzzuk.mtg.organizer.StringOptional;
 import pl.khuzzuk.mtg.organizer.dm.*;
 
 import java.io.File;
@@ -70,8 +71,6 @@ public class CardsPaneController extends ListedController<Card> {
         bus.setGuiReaction(messages.getProperty("cards.receive.editions.chosen"), this::loadEdition);
         bus.setReaction(messages.getProperty("properties.files.chooser.location"), this::setLastFileLocation);
         bus.send(messages.getProperty("properties.get.string"), messages.getProperty("properties.files.chooser.location"), "lastLocation");
-        cardView.setFitWidth(500);
-        cardView.setFitHeight(700);
         ComboBoxHandler.fill(PrimaryType.SET, primaryType);
         ComboBoxHandler.fill(CardRarity.SET, rarity);
 
@@ -90,12 +89,12 @@ public class CardsPaneController extends ListedController<Card> {
         Card card = new Card();
         card.setName(name.getText());
         card.setPicId(currentPicId);
-        card.setWhite(Byte.parseByte(whiteNumber.getText()));
-        card.setBlue(Byte.parseByte(blueNumber.getText()));
-        card.setGreen(Byte.parseByte(greenNumber.getText()));
-        card.setRed(Byte.parseByte(redNumber.getText()));
-        card.setBlack(Byte.parseByte(blackNumber.getText()));
-        card.setColorless(Byte.parseByte(colorlessNumber.getText()));
+        card.setWhite(Byte.parseByte(new StringOptional(whiteNumber.getText()).orElseGet("0")));
+        card.setBlue(Byte.parseByte(new StringOptional(blueNumber.getText()).orElseGet("0")));
+        card.setGreen(Byte.parseByte(new StringOptional(greenNumber.getText()).orElseGet("0")));
+        card.setRed(Byte.parseByte(new StringOptional(redNumber.getText()).orElseGet("0")));
+        card.setBlack(Byte.parseByte(new StringOptional(blackNumber.getText()).orElseGet("0")));
+        card.setColorless(Byte.parseByte(new StringOptional(colorlessNumber.getText()).orElseGet("0")));
         card.setPrimaryType(ComboBoxHandler.getOrNull(primaryType));
         card.setTypes(types.getItems().stream().collect(Collectors.toSet()));
         card.setEdition(currentEdition);
@@ -207,7 +206,8 @@ public class CardsPaneController extends ListedController<Card> {
 
     @FXML
     private void selectTypes() {
-        bus.send(messages.getProperty("types.load.all"), messages.getProperty("cards.receive.types"));
+        bus.send(messages.getProperty("types.load.filtered"), messages.getProperty("cards.receive.types"),
+                ComboBoxHandler.getOrNull(primaryType));
     }
 
     @FXML

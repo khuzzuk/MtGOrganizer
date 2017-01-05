@@ -16,6 +16,7 @@ import java.util.Properties;
 public class Start extends Application {
     private DAO dao;
     private Bus bus;
+    private DAOFilter filter;
     private Properties messages;
 
     public static void main(String[] args) {
@@ -39,6 +40,7 @@ public class Start extends Application {
 
     private void initDao() {
         dao = new DAO();
+        filter = new DAOFilter(dao);
         dao.initResolvers(Edition.class, Type.class, Card.class);
         bus.setResponse(messages.getProperty("editions.load.all"), () -> dao.getAllEntities(Edition.class));
         bus.setResponseResolver(messages.getProperty("editions.save.named"), e -> {
@@ -55,6 +57,7 @@ public class Start extends Application {
             dao.saveEntity((Type) t);
             return dao.getAllEntities(Type.class);
         });
+        bus.setResponseResolver(messages.getProperty("types.load.filtered"), filter::filterResults);
         bus.setResponseResolver(messages.getProperty("types.delete.named"), t -> {
             dao.removeEntity((Type) t);
             return dao.getAllEntities(Type.class);

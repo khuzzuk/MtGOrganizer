@@ -55,9 +55,10 @@ class PicIdManager {
     }
 
     synchronized void removeNumbered(int id) {
-        if (id == currentId - 1) {
+        File file = new File("db/pics/" + id + ".jpg");
+        if (id == currentId - 1 && file.exists()) {
             currentId--;
+            file.delete();
         }
-        new File("db/pics/" + id + ".jpg").delete();
     }
 }
