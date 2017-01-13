@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import pl.khuzzuk.messaging.Bus;
 import pl.khuzzuk.mtg.organizer.FileNameManager;
@@ -15,12 +16,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class CardsPaneController extends ListedController<Card> {
+    public HBox filters;
+    private Set<FilterOption<Card>> usedFilters;
+    @FXML
+    private ComboBox<FilterOption<Card>> filtersSet;
     @FXML
     private ComboBox<CardRarity> rarity;
     @FXML
@@ -77,6 +81,64 @@ public class CardsPaneController extends ListedController<Card> {
         ((TableColumn<Type, String>) types.getColumns().get(0))
                 .setCellValueFactory(param -> new SimpleStringProperty(
                         param.getValue().getName()));
+
+        addFilters();
+    }
+
+    private void addFilters() {
+        usedFilters = new HashSet<>(8);
+        filtersSet.setCellFactory(param -> new FilterCell<>());
+        filtersSet.getItems().addAll(buildIconFilter("white mana", new Image("Mana_W.png"), c -> c.getWhite() > 0),
+                buildIconFilter("green mana", new Image("Mana_G.png"), c -> c.getGreen() > 0),
+                buildIconFilter("blue mana", new Image("Mana_N.png"), c -> c.getBlue() > 0),
+                buildIconFilter("red mana", new Image("Mana_R.png"), c -> c.getRed() > 0),
+                buildIconFilter("black mana", new Image("Mana_B.png"), c -> c.getBlack() > 0),
+                buildStringFilter("Mythics", c -> c.getRarity() == CardRarity.MYTHIC));
+    }
+
+    private FilterOption<Card> buildIconFilter(String name, Image representation,
+                                                    Predicate<Card> predicate) {
+        IconFilterOption filter = new IconFilterOption();
+        filter.setName(name);
+        filter.setRepresentation(representation);
+        filter.setPredicate(predicate);
+        filter.getButton().setOnAction(e -> {
+            filters.getChildren().remove(filter.getButton());
+            usedFilters.remove(filter);
+            sendFilterRequest();
+        });
+        return filter;
+    }
+
+    private FilterOption<Card> buildStringFilter(String name, Predicate<Card> predicate) {
+        StringFilterOption filter = new StringFilterOption();
+        filter.setName(name);
+        filter.setPredicate(predicate);
+        filter.getButton().setOnAction(e -> {
+            filters.getChildren().remove(filter.getButton());
+            usedFilters.remove(filter);
+            sendFilterRequest();
+        });
+        return filter;
+    }
+
+    private Collection<Predicate<Card>> getPredicates() {
+        return usedFilters.stream().map(FilterOption::getPredicate).collect(Collectors.toList());
+    }
+
+    private void addFilter(FilterOption<Card> filter) {
+        usedFilters.add(filter);
+        filters.getChildren().add(filter.getButton());
+    }
+
+    @FXML
+    private void selectFilter() {
+        Optional.ofNullable(ComboBoxHandler.getOrNull(filtersSet)).ifPresent(this::addFilter);
+        sendFilterRequest();
+    }
+
+    private void sendFilterRequest() {
+        bus.send(messages.getProperty("cards.load.filtered"), messages.getProperty("cards.receive.all"), getPredicates());
     }
 
     @Override

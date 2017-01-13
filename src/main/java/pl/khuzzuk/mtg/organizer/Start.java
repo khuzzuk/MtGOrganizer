@@ -11,7 +11,9 @@ import pl.khuzzuk.mtg.organizer.gui.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.Properties;
+import java.util.function.Predicate;
 
 public class Start extends Application {
     private DAO dao;
@@ -38,6 +40,7 @@ public class Start extends Application {
         new ChooserStage(new EditionChooserController(bus, messages)).init();
     }
 
+    @SuppressWarnings("unchecked")
     private void initDao() {
         dao = new DAO();
         filter = new DAOFilter(dao);
@@ -68,6 +71,8 @@ public class Start extends Application {
             dao.saveEntity((Card) c);
             return dao.getAllEntities(Card.class);
         });
+        bus.setResponseResolver(messages.getProperty("cards.load.filtered"),
+                p -> filter.getFiltered(Card.class, (Collection<Predicate<Card>>) p));
         bus.setResponseResolver(messages.getProperty("cards.delete.named"), c -> {
             dao.removeEntity((Card) c);
             return dao.getAllEntities(Card.class);

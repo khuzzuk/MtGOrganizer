@@ -17,7 +17,12 @@
            maxHeight="Infinity" maxWidth="Infinity"
            fx:controller="pl.khuzzuk.mtg.organizer.gui.CardsPaneController"
            dividerPositions="0.3">
-    <ListView maxWidth="Infinity" maxHeight="Infinity" fx:id="items" onMouseClicked="#select"/>
+    <SplitPane maxWidth="Infinity" maxHeight="Infinity" dividerPositions="0.05" orientation="VERTICAL">
+        <HBox fx:id="filters" maxHeight="Infinity" maxWidth="Infinity">
+            <ComboBox fx:id="filtersSet" onAction="#selectFilter"/>
+        </HBox>
+        <ListView maxWidth="Infinity" maxHeight="Infinity" fx:id="items" onMouseClicked="#select"/>
+    </SplitPane>
     <GridPane hgap="5" vgap="3">
         <padding>
             <Insets top="5" bottom="5" left="5" right="5"/>
